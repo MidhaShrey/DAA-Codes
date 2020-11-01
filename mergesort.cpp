@@ -1,103 +1,84 @@
 #include<iostream>
-
+#include<stdlib.h>
 using namespace std;
 
-void merge(int *ar,int l,int mid,int u)
+void merge(int arr[], int l, int m, int r)
 {
-    int i,j,k,n1,n2;
-    n1=l+mid+1;
-    n2=u-mid;
-    int ar1[n1],ar2[n2];
-    for (int i = 0; i < n1; i++)
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    int L[n1], R[n2];
+    for (i = 0; i < n1; i++)
     {
-        ar1[i]=ar[l+i];//insert the leaf nodes obtained from first half of the mergesort
+        L[i] = arr[l + i];
+    }    
+    for (j = 0; j < n2; j++)
+    {
+        R[j] = arr[m + 1+ j];
     }
-    for (int i = 0; i < n2; i++)
+    i = 0;
+    j = 0;
+    k = l;
+    while (i < n1 && j < n2)
     {
-        ar2[i]=ar[mid+1+i];//insert the leaf nodes obtained from second half of the mergesort
-    }
-    i=0;j=mid+1;k=l;
-    while (i<n1&&j<n2)
-    {
-        if (ar1[i]<ar2[j])
+        if (L[i] <= R[j])
         {
-            ar[k]=ar1[i];
+            arr[k] = L[i];
+            i++;
         }
         else
         {
-            ar[k]=ar2[j];
+            arr[k] = R[j];
+            j++;
         }
         k++;
     }
-    while (i<n1)
+    while (i < n1)
     {
-        ar[k]=ar1[i];
-        k++;
+        arr[k] = L[i];
         i++;
-    }
-    while (j<n2)
-    {
-        ar[k]=ar2[j];
         k++;
+    }
+    while (j < n2)
+    {
+        arr[k] = R[j];
         j++;
+        k++;
     }
 }
 
-
-void mergesort(int * ar,int i,int j)//i->lower index,j->higher index
+void mergeSort(int arr[], int l, int r)
 {
-    if (i<j)
+    if (l < r)
     {
-        int mid=(i+j)/2;
-        mergesort(ar,i,mid);
-        mergesort(ar,mid+1,j);
-        merge(ar,i,mid,j);
+        int m = l+(r-l)/2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m+1, r);
+        merge(arr, l, m, r);
     }
-    else
-    {
-        exit;
-    }
-    
 }
 
-void swap(int &a,int &b)
+void printArray(int A[], int size)
 {
-    int temp;
-    temp=a;
-    a=b;
-    b=temp;
-}
-
-void display(int *ar,int n)
-{
-    for (int i = 0; i <n; i++)
+    int i;
+    for (i=0; i < size; i++)
     {
-        cout<<ar[i];
-        if (i<n)
-        {
-            cout<<",";
-        }
-        
+        cout<<A[i]<<",";
     }
-    cout<<endl;
-    
 }
 
 int main()
 {
-    int i,n;
-    cout<<"Enter the size of The Array:";
-    cin>>n;
-    int ar[n];
-    cout<<"Enter the Array Elements:";
-    for (i = 0; i < n; i++)
-    {
-        cin>>ar[i];
-    }
-    cout<<"Array before Sorting:";
-    display(ar,n);
-    mergesort(ar,0,n-1);
-    cout<<"The Sorted Array:";
-    display(ar,n-1);
-    return 0;
+int arr[100];
+int size,i;
+cout<<"Enter size of array: ";
+cin>>size;
+cout<<"Enter elements of array: ";
+for(i=0;i<size;i++){
+    cin>>arr[i];
+}
+mergeSort(arr, 0, size - 1);
+cout<<"Sorted array is: ";
+printArray(arr, size);
+return 0;
 }
