@@ -1,66 +1,60 @@
-#include <iostream>
-using namespace std;
- 
-void quick_sort(int[],int,int);
-int partition(int[],int,int);
- 
-int main()
-{
-	int a[50],n,i;
-	cout<<"Enter the Size of Array : \n";
-	cout<<n;
-	cout<<"\nEnter array elements:";
+#include<iostream>
+using namespace std;  
+int temp;  
+  
+void heapify(int arr[], int size, int i)  
+{  
+	int largest = i;    
+	int left = 2*i + 1;    
+	int right = 2*i + 2;    
 	
-	for(i=0;i<n;i++)
-		cout<<a[i];
-		
-	quick_sort(a,0,n-1);
-	cout<<"\nArray after sorting:";
-	
-	for(i=0;i<n;i++)
-		cout<<a[i];
-	
-	return 0;		
-}
- 
-void quick_sort(int a[],int l,int u)
-{
-	int j;
-	if(l<u)
+	if (left < size && arr[left] >arr[largest])  
 	{
-		j=partition(a,l,u);
-		quick_sort(a,l,j-1);
-		quick_sort(a,j+1,u);
+		largest = left;  
 	}
-}
- 
-int partition(int a[],int l,int u)
-{
-	int v,i,j,temp;
-	v=a[l];
-	i=l;
-	j=u+1;
-	
-	do
+	if (right < size && arr[right] > arr[largest])  
 	{
-		do
-			i++;
-			
-		while(a[i]<v&&i<=u);
-		
-		do
-			j--;
-		while(v<a[j]);
-		
-		if(i<j)
-		{
-			temp=a[i];
-			a[i]=a[j];
-			a[j]=temp;
-		}
-	}while(i<j);
-	
-	a[l]=a[j];
-	a[j]=v;
-	return(j);
+		largest = right;  
+	}
+	if (largest != i)  
+	{  
+		temp = arr[i];  
+		arr[i]= arr[largest];   
+		arr[largest] = temp;  
+		heapify(arr, size, largest);  
+	}  
+}  
+  
+void heapSort(int arr[], int size)  
+{  
+	int i;  
+	for (i = size / 2 - 1; i >= 0; i--)  
+	{
+		heapify(arr, size, i);
+	}  
+	for (i=size-1; i>=0; i--)  
+	{
+		temp = arr[0];  
+		arr[0]= arr[i];   
+		arr[i] = temp;  
+		heapify(arr, i, 0);  
+	}  
+}  
+  
+int main()  
+{
+	int arr[100],i,size; 
+	cout<<"enter the Size Of Array :\n";
+	cin>>size;
+	cout<<"Enter the Array : \n";
+	for(i=0;i<size;i++)
+	{
+	   scanf("%d",&arr[i]);
+	}
+  
+	heapSort(arr, size);    
+	cout<<"printing sorted elements\n"; 
+	for (i=0; i<size; ++i)  
+	cout<<arr[i];
+	return 0;  
 }
